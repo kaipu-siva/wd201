@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Registration Form</title>
+  <style>
+    table,th,td{
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    table.center{
+        margin-left: auto;
+        margin-right: auto;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+
+  <div class="bg-white p-8 rounded shadow-md w-96">
+    <h2 class="text-2xl font-black mb-6">Registration Form</h2>
+
+    <form id="user-form">
+      <div class="mb-4">
+        <label for="name" class="block text-gray-600 text-sm font-medium mb-2">Name</label>
+        <input required type="text" id="name" name="name" class="w-full border rounded-md py-2 px-3">
+      </div>
+
+      <div class="mb-4">
+        <label for="email" class="block text-gray-600 text-sm font-medium mb-2">Email</label>
+        <input required type="email" id="email" name="email" class="w-full border rounded-md py-2 px-3">
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="block text-gray-600 text-sm font-medium mb-2">Password</label>
+        <input required type="password" id="password" name="password" class="w-full border rounded-md py-2 px-3">
+      </div>
+
+      <div class="mb-4">
+        <label for="date" class="block text-gray-600 text-sm font-medium mb-2">dob</label>
+        <input required type="date" id="dob" name="dob" class="w-full border rounded-md py-2 px-3">
+      </div>
+
+      <div class="mb-4">
+        <label for="acceptTerms" class="block text-gray-600 text-sm font-medium mb-2">Accept Terms & Conditions</label>
+        <input required type="checkbox" id="acceptTerms" name="acceptTerms" class=" border rounded-md py-2 px-3">
+      </div>
+
+      <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">submit</button>
+    </form>
+  </div>
+  <div>
+    <h2 style="text-align:center;"><b>Entries</b></h2>
+    <div id="user-entries"></div>
+  </div>
+  <script>
+    let UserForm=document.getElementById("user-form");
+
+    const Entry = document.getElementById('dob');
+
+    Entry.addEventListener('input', (event) => {
+        const o = new Date(event.target.value);
+        const n = new Date();
+        const age = n.getFullYear() - o.getFullYear();
+
+        if ((age < 18) || age > 55) {
+            Entry.setCustomValidity('Please enter a valid date of birth between ages 18 and 55.');
+        }
+        else{
+            Entry.setCustomValidity('');
+        }
+    });
+    let retrieveEntries = () => {
+        let data = localStorage.getItem("user-entries");
+        if (data) {
+            try {
+                data = JSON.parse(data);
+            } catch (error) {
+                console.error("Error parsing JSON data:", error);
+                data = [];
+            }
+        } else {
+            data = [];
+        }
+        return Array.isArray(data) ? data : [];
+    };
+
+
+    let Entries=retrieveEntries();
+    const displayE = () => {
+        const data=retrieveEntries();
+        const tableentries=data.map((entry)=>{
+            const namecell=`<td >${entry.name}</td>`;
+            const emailcell=`<td >${entry.email}</td>`;
+            const passwordcell=`<td  >${entry.password}</td>`;
+            const datecell=`<td >${entry.dob}</td>`;
+            const acceptcell=`<td >${entry.acceptTermsAndconditions}</td>`;
+            
+            const row=`<tr>${namecell} ${emailcell} ${passwordcell} ${datecell} ${acceptcell}</tr>`;
+            return row;
+        }).join("\n");
+
+        const table=`<table class="center"><tr>
+        <th >Name</th>
+        <th >Email</th>
+        <th >Password</th>
+        <th >Dob</th>
+        <th >Accepted terms?</th>
+    </tr>${tableentries}</table> `;
+  
+    let details=document.getElementById("user-entries");
+    details.innerHTML=table;
+    }
+
+    const saveUserForm = (event) => {
+        event.preventDefault();
+        const name=document.getElementById("name").value;
+        const email=document.getElementById("email").value;
+        const password=document.getElementById("password").value;
+        const dob=document.getElementById("dob").value;
+
+        const acceptTermsAndconditions=document.getElementById("acceptTerms").checked.toString();
+
+        const entry = {
+            name,
+            email,
+            password,
+            dob,
+            acceptTermsAndconditions
+        };
+        Entries.push(entry);
+        localStorage.setItem("user-entries",JSON.stringify(Entries));
+        displayE();
+    }
+    UserForm.addEventListener("submit",saveUserForm);
+    displayE();
+  </script>
+</body>
+</html>
