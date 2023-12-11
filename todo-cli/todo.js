@@ -53,7 +53,7 @@ const todoList = () => {
         mark="[x]";
         }
         else{
-        mark="[]"
+        mark="[ ]"
         }
         let datee;
         if(y.dueDate===today){
