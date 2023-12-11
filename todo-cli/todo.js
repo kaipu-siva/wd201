@@ -12,8 +12,8 @@ const todoList = () => {
       // of overdue items accordingly.
       const overD=[];
       for(let x in all){
-        if(x.dueDate===yesterday){
-            overD.push(x);
+        if(all[x].dueDate===yesterday){
+            overD.push(all[x]);
         }
       }
       return overD;
@@ -24,8 +24,8 @@ const todoList = () => {
       // of todo items that are due today accordingly.
       const dueT=[];
       for(let x in all){
-        if(x.dueDate===today){
-            dueT.push(x);
+        if(all[x].dueDate===today){
+            dueT.push(all[x]);
         }
       }
       return dueT;
@@ -36,8 +36,8 @@ const todoList = () => {
       // of todo items that are due later accordingly.
       const dueL=[];
       for(let x in all){
-        if(x.dueDate===tomorrow){
-            dueL.push(x);
+        if(all[x].dueDate===tomorrow){
+            dueL.push(all[x]);
         }
       }
       return dueL;
@@ -49,17 +49,19 @@ const todoList = () => {
       return list
        .map((y)=>{
         let mark;
-        if(y.completed)
+        if(y.completed){
         mark="[x]";
-        else
+        }
+        else{
         mark="[]"
-
+        }
         let datee;
-        if(y.dueDate===today)
+        if(y.dueDate===today){
         datee="";
-        else
+        }
+        else{
         datee=y.dueDate;
-
+        }
         return `${mark} ${y.title.trim()} ${datee.trim()}`;
        })
        .join("\n");
