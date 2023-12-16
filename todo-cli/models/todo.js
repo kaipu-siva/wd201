@@ -42,7 +42,6 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Sequelize.Op.lt]: today,
           },
-          completed: false,
         },
         order: [["dueDate", "ASC"]],
       });
@@ -54,7 +53,6 @@ module.exports = (sequelize, DataTypes) => {
       return await this.findAll({
         where: {
           dueDate: today,
-          completed: false,
         },
         order: [["dueDate", "ASC"]],
       });
@@ -68,7 +66,6 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Sequelize.Op.gt]: today,
           },
-          completed: false,
         },
         order: [["dueDate", "ASC"]],
       });
@@ -76,19 +73,19 @@ module.exports = (sequelize, DataTypes) => {
 
     static async markAsComplete(id) {
       // FILL IN HERE TO MARK AN ITEM AS COMPLETE
-      const task = await this.findByPk(id);
+      const task = await Todo.findByPk(id);
       if (task) {
         task.completed = true;
         await task.save();
-        console.log(`Task ${id} marked as complete.`);
-      } else {
-        console.log(`Task ${id} not found.`);
       }
     }
 
     displayableString() {
       let checkbox = this.completed ? "[x]" : "[ ]";
-      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
+      const day = new Date(this.dueDate);
+      return day.getDate() === new Date().getDate()
+        ? `${this.id}. ${checkbox} ${this.title}`
+        : `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
     }
   }
   Todo.init(
