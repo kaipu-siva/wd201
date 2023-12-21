@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require("express");
 const app = express();
 const { Todo } = require("./models");
@@ -68,7 +69,7 @@ app.delete("/todos/:id", async function (request, response) {
 
     // Check if the Todo exists
     if (!todo) {
-      return response.status(404).json({ error: "Todo not found" });
+      return response.status(404).json({ success: false });
     }
 
     // Use Sequelize to delete the Todo
