@@ -69,14 +69,14 @@ app.delete("/todos/:id", async function (request, response) {
 
     // Check if the Todo exists
     if (!todo) {
-      return response.status(404).json({ success: false });
+      return response.status(404).json(false);
     }
 
     // Use Sequelize to delete the Todo
     const deletedTodo = await todo.destroy();
 
     // Respond with true if the Todo was successfully deleted
-    return response.json({ success: true });
+    return response.json(true);
   } catch (error) {
     console.log(error);
     return response.status(500).json({ error: "Internal Server Error" });
