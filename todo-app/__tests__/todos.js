@@ -91,7 +91,7 @@ describe("Todo Application", function () {
 
     // Check if the deletion was successful
     expect(deleteResponse.status).toBe(200);
-    expect(deleteResponse.body.success).toBe(true);
+    expect(deleteResponse.body).toBe(true);
 
     // Check if the todo no longer exists after deletion
     const postDeleteResponse = await agent.get(`/todos/${todoIDToDelete}`);
