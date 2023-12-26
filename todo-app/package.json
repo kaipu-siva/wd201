@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon -e js,ejs",
-    "start:prod":"node index.js",
+    "start:prod": "node index.js",
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "test": "NODE_ENV=test jest --detectOpenHandles",
     "prepare": "cd .. && husky install todo-cli/.husky"
@@ -36,6 +36,7 @@
     "nodemon": "^3.0.2",
     "prettier": "^3.1.1",
     "sequelize-cli": "^6.6.2",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "tailwindcss": "^3.4.0"
   }
 }
