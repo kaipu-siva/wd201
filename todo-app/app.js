@@ -3,26 +3,27 @@ const express = require("express");
 const app = express();
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
-const path=require("path");
+const path = require("path");
 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.set("view engine","ejs");
+app.set("view engine", "ejs");
 
-app.get("/",async (request,response)=>{
-  const allTodos= await Todo.getTodos();
-  if( request.accepts("html")){
-    response.render('index',{
-      allTodos
+app.get("/", async (request, response) => {
+  const allTodos = await Todo.getTodos();
+  if (request.accepts("html")) {
+    response.render("index", {
+      allTodos,
     });
-  } else{
+  } else {
     response.json({
-      allTodos
-    })
+      allTodos,
+    });
   }
 });
 
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", function (request, response) {
   response.send("Hello World");
@@ -58,7 +59,8 @@ app.get("/todos/:id", async function (request, response) {
 app.post("/todos", async function (request, response) {
   try {
     const todo = await Todo.addTodo(request.body);
-    return response.json(todo);
+    //return response.json(todo);
+    return response.redirect("/");
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
