@@ -23,7 +23,7 @@ const countDueLater = dueLaterItems.length;
 
 <% if (overdueItems.length >= 0) { %>
     <div>
-        <h5 id="count-overdue">Overdue : <%= countOverdue %></h5>
+        <h5 id="count-overdue">Overdue <%= countOverdue %></h5>
         <ul class="list-none">
             <% overdueItems.forEach(item => { %>
                 <li class="Todo-Item">
@@ -44,7 +44,7 @@ const countDueLater = dueLaterItems.length;
 
 <% if (dueTodayItems.length >= 0) { %>
     <div>
-        <h5 id="count-due-today">Due Today : <%= countDueToday %></h5>
+        <h5 id="count-due-today">Due Today <%= countDueToday %></h5>
         <ul class="list-none">
             <% dueTodayItems.forEach(item => { %>
                 <li class="Todo-Item">
@@ -65,7 +65,7 @@ const countDueLater = dueLaterItems.length;
 
 <% if (dueLaterItems.length >= 0) { %>
     <div>
-        <h5 id="count-due-later">Due Later : <%= countDueLater %></h5>
+        <h5 id="count-due-later">Due Later <%= countDueLater %></h5>
         <ul class="list-none">
             <% dueLaterItems.forEach(item => { %>
                 <li class="Todo-Item">
