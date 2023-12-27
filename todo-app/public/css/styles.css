@@ -1,6 +1,6 @@
-body{
-    font-family: 'Times New Roman', Times, serif;
+body {
+  font-family: "Times New Roman", Times, serif;
 }
-.Todo-Item:hover .trash-icon{
-    display: block;
+.Todo-Item:hover .trash-icon {
+  display: block;
 }

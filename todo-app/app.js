@@ -81,26 +81,12 @@ app.put("/todos/:id/markAsCompleted", async function (request, response) {
 app.delete("/todos/:id", async function (request, response) {
   //console.log("We have to delete a Todo with ID: ", request.params.id);
   // FILL IN YOUR CODE HERE
-  const todoId = request.params.id;
-
+  console.log("Deleting a Todo with ID: ",request.params.id);
   try {
-    console.log("Deleting a Todo with ID: ", todoId);
-    // Use Sequelize to find the Todo by ID
-    const todo = await Todo.findByPk(todoId);
-
-    // Check if the Todo exists
-    if (!todo) {
-      return response.status(404).json(false);
-    }
-
-    // Use Sequelize to delete the Todo
-    const deletedTodo = await todo.destroy();
-
-    // Respond with true if the Todo was successfully deleted
-    return response.json(true);
+    await Todo.remove(request.params.id);
+    return response.json({success:true});
   } catch (error) {
-    console.log(error);
-    return response.status(500).json({ error: "Internal Server Error" });
+    return response.status(500).json(error);
   }
   // First, we have to query our database to delete a Todo by ID.
   // Then, we have to respond back with true/false based on whether the Todo was deleted or not.
