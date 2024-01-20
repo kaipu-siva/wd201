@@ -69,6 +69,14 @@
             <%- include('todo.ejs',{ "container" : "Due Today" , "id" : "count-due-today" , "todos" : DueToday }) %>
             <%- include('todo.ejs',{ "container" : "Due Later" , "id" : "count-due-later" , "todos" : DueLater }) %>
             <%- include('todo.ejs',{ "container" : "Completed Items" , "id" : "count-completed" , "todos" : Complete }) %>
+
+            <% if(messages && messages.error && messages.error.length> 0) { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                    <li>
+                        <%= messages.error[i] %><br>
+                    </li>
+                <% } %>
+            <% } %>
         </div>
     </div>
     <%- include('footer.ejs') %>
