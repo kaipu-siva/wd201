@@ -34,7 +34,9 @@ app.use(session({
   secret: "my-super-secret-key-66498466848",
   cookie:{
     maxAge:24*60*60*1000,
-  }
+  },
+  resave: true,
+  saveUninitialized: true,
 }));
 
 app.use(passport.initialize());
@@ -79,10 +81,12 @@ passport.deserializeUser((id,done)=>{
 });
 
 app.get("/", async (request, response) => {
-    response.render("index", {
-      title:"Todo application",
-      csrfToken: request.csrfToken(),
-    });
+  if (request.isAuthenticated()) {
+    return response.redirect("/todos");
+  }
+  response.render("index", {
+    csrfToken: request.csrfToken(),
+  });
 });
 
 app.get("/todos", connectEnsureLogin.ensureLoggedIn(),async (request, response) => {
@@ -111,12 +115,16 @@ app.get("/todos", connectEnsureLogin.ensureLoggedIn(),async (request, response) 
 });
 
 app.get("/signup",(request,response)=>{
-  response.render("signup",{title:"Signup",csrfToken: request.csrfToken() })
+  if (request.isAuthenticated()) {
+    return response.redirect("/todos");
+  }
+  response.render("signup",{title:"Signup",csrfToken: request.csrfToken() });
 });
 
 app.post("/users",async (request,response)=>{
   const hashedPwd=await bcrypt.hash(request.body.password, saltRounds)
   console.log(hashedPwd)
+  const trimmedPassword = request.body.password.trim();
   //have to create a todo
   if (request.body.firstName.length == 0) {
     request.flash("error", "First Name cant be empty");
@@ -124,7 +132,10 @@ app.post("/users",async (request,response)=>{
   } else if (request.body.email.length == 0) {
     request.flash("error", "Email cant be empty");
     return response.redirect("/signup");
-  } 
+  } else if (trimmedPassword.length == 0) {
+    request.flash("error", "password cannot be empty");
+    return response.redirect("/signup");
+  }
   try{
     const user=await User.create({
       firstName:request.body.firstName,
@@ -144,8 +155,11 @@ app.post("/users",async (request,response)=>{
 })
 
 app.get("/login",(request,response)=>{
+  if (request.isAuthenticated()) {
+    return response.redirect("/todos");
+  }
   response.render("login",{title:"Login",csrfToken:request.csrfToken()});
-})
+});
 
 app.post(
   "/session",
