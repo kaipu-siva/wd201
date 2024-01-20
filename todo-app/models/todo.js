@@ -9,11 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
+      Todo.belongsTo(models.User,{
+        foreignKey:'userId'
+      });
       // define association here
     }
 
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate ,userId}) {
+      return this.create({ title: title, dueDate: dueDate, completed: false, userId });
     }
 
     static getTodos() {
@@ -28,48 +31,50 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static async OverdueTodos() {
+    static async OverdueTodos(userId) {
       const date = new Date();
       return this.findAll({
         where: {
           dueDate: {
             [Op.lt]: date,
           },
+          userId,
           completed: false,
         },
       });
     }
 
-    static async dueTodayTodos() {
+    static async dueTodayTodos(userId) {
       const date = new Date();
       return this.findAll({
         where: {
           dueDate: {
             [Op.eq]: date,
           },
+          userId,
           completed: false,
         },
       });
     }
 
-    static async dueLaterTodos() {
+    static async dueLaterTodos(userId) {
       const date = new Date();
       return this.findAll({
         where: {
           dueDate: {
             [Op.gt]: date,
           },
+          userId,
           completed: false,
         },
       });
     }
 
-    static async CompletedTodos() {
+    static async CompletedTodos(userId) {
       return this.findAll({
         where: {
-          completed: {
-            [Op.eq]: true,
-          },
+          completed:true,
+          userId
         },
       });
     }
