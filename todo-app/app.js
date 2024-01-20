@@ -214,6 +214,14 @@ app.get("/", function (request, response) {
 app.post("/todos", connectEnsureLogin.ensureLoggedIn(), async (request, response) => {
   console.log("Creating a todo",request.body);
   console.log(request.user);
+  if (request.body.title.trim().length === 0) {
+    request.flash("error", "Todo title cannot be empty");
+    return response.redirect("/todos");
+  }
+  if (request.body.dueDate.trim().length === 0) {
+    request.flash("error", "Todo due date cannot be empty");
+    return response.redirect("/todos");
+  }
   try {
     await Todo.addTodo({
       title:request.body.title,
@@ -243,10 +251,12 @@ app.delete("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (req
   //console.log("We have to delete a Todo with ID: ", request.params.id);
   // FILL IN YOUR CODE HERE
   console.log("Deleting a Todo with ID: ",request.params.id);
+  const loggedInUser = request.user.id;
   try {
-    await Todo.remove(request.params.id);
+    await Todo.remove(request.params.id,loggedInUser);
     return response.json({success:true});
   } catch (error) {
+    console.log(error);
     return response.status(500).json(error);
   }
   // First, we have to query our database to delete a Todo by ID.
